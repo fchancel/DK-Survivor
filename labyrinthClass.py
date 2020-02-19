@@ -25,7 +25,7 @@ class Labyrinth:
         self.way = way
         self.obstacles = obstacles
         self.exitway = exitway
-        self._grille = self.colorLabyrinth(labyrinth)
+        self._grille = labyrinth
 
     def __str__(self):
         print('')
@@ -34,12 +34,22 @@ class Labyrinth:
         """
         Affiche le labyrinthe
         """
-        for elt in self._grille:
+        labyrinth = self.colorLabyrinth(self._grille)
+        for elt in labyrinth:
             print(elt)
+
+    # def returnLabyrinth(self):
+    #     return self._grille
+
+    # def returnStrLabyrinth(self):
+    #     string = '\n'.join(self._grille)
+    #     print(string)
+    #     return(string)
 
     def colorLabyrinth(self, labyrinth):
         """
         Met en couleur les éléments du labyrinthe
+        Retourne une liste comportant le labyrinthe
         """
         newElt = []
         newLabyrinth = []
@@ -59,6 +69,16 @@ class Labyrinth:
             newElt = [] 
         return(newLabyrinth)
     
-    #def position()
+    def checkPosition(self, key):
+        positionRobot = self.findRobot()
 
-    #def checkPosition()
+
+
+    def findRobot(self):
+        """
+        Renvoie la position du robot
+        """
+        for i, elt in enumerate(self._grille):
+            if self.robot in elt:
+                return(i, elt.index(self.robot))
+

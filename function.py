@@ -28,6 +28,7 @@ def choiceMapGame(lstMap):
     mapName = lstMap[choice - 1][0]
     mapStr = lstMap[choice - 1][1]
     mapChoice = Map(mapName, mapStr)
+    os.system('clear')
     return mapChoice
 
 
@@ -48,4 +49,5 @@ def listFiles(way):
 
 def runGame(choiceMap):
     labyrinth = Labyrinth('X', ' ', 'O', 'U', '.' ,choiceMap.returnLabyrinth())
+    labyrinth.checkPosition()
     labyrinth.print()
