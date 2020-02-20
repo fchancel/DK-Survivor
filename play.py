@@ -1,10 +1,12 @@
-#!/bin/python3
+#!/usr/bin/env python
 # -*-coding:utf-8 -*
 
 import os.path
 import pickle
 from function import *
+from pynput import keyboard
 from mapClass import Map
+from labyrinthClass import Labyrinth
 from os import listdir
 """
     LAUNCHING GAME ROBOC

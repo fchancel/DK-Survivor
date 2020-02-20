@@ -3,10 +3,24 @@
 
 import os.path
 import pickle
-import tkinter
 from mapClass import Map
 from labyrinthClass import Labyrinth
 from os import listdir
+from pynput import keyboard
+
+def on_press(key):
+    global moveKey
+    moveKey = 'no'
+    if key == keyboard.Key.up:
+        moveKey = 'up'
+    elif key == keyboard.Key.down:
+        moveKey = 'down'
+    elif key == keyboard.Key.right:
+        moveKey = 'right'
+    elif key == keyboard.Key.left:
+        moveKey = 'left'
+    return False
+
 
 def choiceMapGame(lstMap):
     """
@@ -51,28 +65,11 @@ def listFiles(way):
 def runGame(choiceMap):
     labyrinth = Labyrinth('X', ' ', 'O', 'U', '.' ,choiceMap.returnLabyrinth())
     continueGame = 0
-    labyrinth.print()
+    labyrinth.printColor()
     while continueGame != 1:
-        move = input()
+        with keyboard.Listener(on_press=on_press) as listener:
+            listener.join()
         os.system('clear')
-        newPst = labyrinth.newPosition(move)
+        newPst = labyrinth.newPosition(moveKey)
         continueGame = labyrinth.checkNewPosition(newPst)
-        labyrinth.print()
-
-# from pynput import keyboard
-
-# def on_press(key):
-#     if key == keyboard.Key.esc:
-#         return False  # stop listener
-#     try:
-#         k = key.char  # single-char keys
-#     except:
-#         k = key.name  # other keys
-#     if k in ['1', '2', 'left', 'right']:  # keys of interest
-#         # self.keys.append(k)  # store it in global-like variable
-#         print('Key pressed: ' + k)
-#         return False  # stop listener; remove this if want more keys
-
-# listener = keyboard.Listener(on_press=on_press)
-# listener.start()  # start to listen on a separate thread
-# listener.join()  # remove if main thread is polling self.keys
+        labyrinth.printColor()

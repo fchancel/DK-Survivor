@@ -31,7 +31,7 @@ class Labyrinth:
     def __str__(self):
         print('')
 
-    def print(self):
+    def printColor(self):
         """
         Affiche le labyrinthe
         """
@@ -78,13 +78,13 @@ class Labyrinth:
         pstRobot = self.findRobot()
         i = pstRobot[0]
         j = pstRobot[1]
-        if key.upper() == 'W':
+        if key == 'up':
             i-=1
-        elif key.upper() == 'S':
+        elif key == 'down':
             i+=1
-        elif key.upper() == 'A':
+        elif key == 'left':
             j-=1
-        elif key.upper() == 'D':
+        elif key == 'right':
             j+=1
         return (i, j)
     
@@ -105,7 +105,7 @@ class Labyrinth:
             self.moveRobot(newPst)
             return 0
         else:
-            VERIFIER DE NE PAS SORTIR DE LA CARTE
+            # VERIFIER DE NE PAS SORTIR DE LA CARTE
             return -1
 
     def moveRobot(self,newPst):
