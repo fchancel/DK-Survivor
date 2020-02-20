@@ -23,6 +23,7 @@ class Labyrinth:
         self.robot = robot
         self.door = door
         self.way = way
+        self.oldPosition = way
         self.obstacles = obstacles
         self.exitway = exitway
         self._grille = labyrinth
@@ -69,10 +70,60 @@ class Labyrinth:
             newElt = [] 
         return(newLabyrinth)
     
-    def checkPosition(self, key):
-        positionRobot = self.findRobot()
+    def newPosition(self, key):
+        """
+        Prends en paramètre key, qui correspond à la direction souhaité par le joueur
+        Retourne une tuple correspondant au indice de la grille correspondant à la position
+        """
+        pstRobot = self.findRobot()
+        i = pstRobot[0]
+        j = pstRobot[1]
+        if key.upper() == 'W':
+            i-=1
+        elif key.upper() == 'S':
+            i+=1
+        elif key.upper() == 'A':
+            j-=1
+        elif key.upper() == 'D':
+            j+=1
+        return (i, j)
+    
 
+    def checkNewPosition(self, newPst):
+        """
+        Prend en paramètre la nouvelle position voulu.
+        Verifie s'il est possible d'accéder à la nouvelle position
+        Retourne 1 si la nouvelle position est la sortie
+        Retourne 0 si la nouvelle position est OK
+        Retourne -1 si la nouvelle position est inaccessible
+        """
+        onNewPst = self._grille[newPst[0]][newPst[1]]
+        if onNewPst == self.exitway:
+            self.moveRobot(newPst)
+            return 1
+        elif onNewPst == self.way or onNewPst == self.door:
+            self.moveRobot(newPst)
+            return 0
+        else:
+            VERIFIER DE NE PAS SORTIR DE LA CARTE
+            return -1
 
+    def moveRobot(self,newPst):
+        """
+        Prends en paramètre la nouvelle position désiré
+        Déplace le robot sur la nouvelle position
+        Réinscrit ce qui se situait sous l'ancienne position (porte, chemin, obstacle)
+        """
+        oldPst = self.findRobot()
+        Oi = oldPst[0]
+        Oj = oldPst[1]
+        Ni = newPst[0]
+        Nj = newPst[1]
+        Nstring = self._grille[Oi][:Oj] + self.oldPosition + self._grille[Oi][Oj + 1:]
+        self._grille[Oi] = Nstring
+        self.oldPosition = self._grille[Ni][Nj]
+        Nstring = self._grille[Ni][:Nj] + self.robot + self._grille[Ni][Nj + 1:]
+        self._grille[Ni] = Nstring
 
     def findRobot(self):
         """
@@ -81,4 +132,7 @@ class Labyrinth:
         for i, elt in enumerate(self._grille):
             if self.robot in elt:
                 return(i, elt.index(self.robot))
+
+
+
 
