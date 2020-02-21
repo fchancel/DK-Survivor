@@ -1,41 +1,75 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*
 
-import os.path
-import pickle
+import pygame
+from pygame.locals import *
+from constante import Consts
 from function import *
-from pynput import keyboard
-from mapClass import Map
-from labyrinthClass import Labyrinth
-from os import listdir
-"""
-    LAUNCHING GAME ROBOC
-"""
+from Class import *
 
-choice = 0
+pygame.init()
+frame = pygame.display.set_mode((Consts.FRAME_SIZE, Consts.FRAME_SIZE))
+pygame.display.set_caption(Consts.TITLE_FRAME)
 
-print("Bienvenu sur le jeu Roboc ! \n")
-if os.path.exists('save/inProgress'): #check if game is in progress
-    print("SOuhaitez vous reprendre la partie en cours?\n\
-    1 : OUI\n\
-    2 : NON\n")
-    while choice != 1 and choice != 2:
-        try:
-            choice = int(input())
-        except ValueError:
-            print('Veuillez choisir un chiffre.')
-        if choice < 1 or choice > 2:
-            print('Veuillez choisir entre 1 (OUI) ou 2 (NON)')
-else:
-    choice = 2
+keepFrame = 1
+menu = 1
+game = 0
+choiceLvl = 1
+firstTime = 1
 
-if choice == 1 :
-    with open('save/inprogress', 'rb') as file:
-        inprogess = pickle.Unpickler(file)
-        mapGame = inprogess.load()
-elif choice == 2:
-    lstMap = listFiles('maps')
-    choiceMap = choiceMapGame(lstMap)
-    runGame(choiceMap)
+pygame.key.set_repeat(100, 50)
+while keepFrame == 1: #BOUCLE FENETRE
+    while menu == 1: #BOUCLE UTILISATION DU MENU
+        pygame.time.Clock().tick(30)
+        printMenu(frame, choiceLvl)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                keepFrame = 0
+                menu = 0
+            if event.type == KEYDOWN:
+                if event.key == K_DOWN and choiceLvl < 3:
+                    choiceLvl += 1
+                elif event.key == K_UP and choiceLvl > 1:
+                    choiceLvl -= 1
+                elif event.key == K_1:
+                    choiceLvl =1 
+                elif event.key == K_2:
+                    choiceLvl = 2 
+                elif event.key == K_3:
+                    choiceLvl = 3 
+                elif event.key == K_RETURN:
+                    menu = 0
+                    game = 1
+                elif event.key == K_ESCAPE:
+                    game = 0
+                    menu = 0
+                    keepFrame = 0
+    
+    while game == 1: #BOUCLE UTILISATION DU JEU
+        pygame.time.Clock().tick(30)
+        if firstTime == 1:
+            with open('maps/n_' + str(choiceLvl) + '.txt', 'r') as fileMap:
+                labyrinth = Labyrinth(frame, 'n_' + str(choiceLvl), fileMap.read())
+            perso = Perso(frame, labyrinth)
+            firstTime = 0
 
-
+        labyrinth.printLabyrinth()
+        perso.printPerso()
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                keepFrame = 0
+                game = 0
+            if event.type == KEYDOWN:
+                if event.key == K_DOWN:
+                    perso.moveDk('down')
+                elif event.key == K_UP:
+                    perso.moveDk('up')
+                elif event.key == K_LEFT:
+                    perso.moveDk('left')
+                elif event.key == K_RIGHT:
+                    perso.moveDk('right')
+                elif event.key == K_ESCAPE:
+                    game = 0
+                    menu = 1
+                    firstTime = 1

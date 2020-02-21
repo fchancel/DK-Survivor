@@ -1,75 +1,45 @@
-#!/bin/python3
+#!/usr/bin/env python
 # -*-coding:utf-8 -*
 
-import os.path
-import pickle
-from mapClass import Map
-from labyrinthClass import Labyrinth
-from os import listdir
-from pynput import keyboard
+import pygame
+from pygame.locals import *
+from constante import Consts
 
-def on_press(key):
-    global moveKey
-    moveKey = 'no'
-    if key == keyboard.Key.up:
-        moveKey = 'up'
-    elif key == keyboard.Key.down:
-        moveKey = 'down'
-    elif key == keyboard.Key.right:
-        moveKey = 'right'
-    elif key == keyboard.Key.left:
-        moveKey = 'left'
-    return False
+def printMenu(frame, choice):
+    #MENU
+    #AFFICHAGE DU TITRE
+    titleText = pygame.font.SysFont('quicksand', 60)
+    normalText = pygame.font.SysFont('dejavusansmono', 35)
+    tText = titleText.render(Consts.TITLE_FRAME, True, (255, 255, 255))
+    titleTextPos = tText.get_rect()
+    titleTextPos.centerx = frame.get_rect().centerx
+    titleTextPos.centery = 50
 
+    frame.blit(tText, titleTextPos)
 
-def choiceMapGame(lstMap):
-    """
-    Prend en paramètre un dictionnaire comportant les
-    noms de la carte ainsi que la carte sous forme de str
-    Retourne l'objet mapChoice (instance de la classe Map)
-    """
-    print('Veuillez choisir quelle carte désirez-vous ?\n')
-    for nb, elt in enumerate(lstMap):
-        print('{} - {}'.format(nb + 1, elt[0]))
-    choice = 0
-    sizeMap = len(lstMap)
-    while choice < 1 or choice > sizeMap:
-        try:
-            choice = int(input())
-        except ValueError:
-            print('Veuillez choisir un chiffre.')
-        if choice < 1 or choice > sizeMap:
-            print('Veuillez choisir entre 1 et {}.'.format(sizeMap))
-    mapName = lstMap[choice - 1][0]
-    mapStr = lstMap[choice - 1][1]
-    mapChoice = Map(mapName, mapStr)
-    os.system('clear')
-    return mapChoice
+    #AFFICHAGE DES CHOIX
+    white = (255, 255, 255)
+    green = (55, 255, 55)
+    easyLvl = normalText.render("1 - Facile", True, white)
+    mediumLvl = normalText.render('2 - Moyen', True, white)
+    hardLvl = normalText.render('3 - Difficile', True, white)
+    if choice == 1:
+        easyLvl = normalText.render("1 - Facile", True, green)
+    elif choice == 2:
+        mediumLvl = normalText.render('2 - Moyen', True, green)
+    elif choice == 3:
+        hardLvl = normalText.render('3 - Difficile', True, green)
 
+    easyLvlPos = easyLvl.get_rect() 
+    mediumLvlPos = mediumLvl.get_rect() 
+    hardLvlPos = hardLvl.get_rect()
 
-def listFiles(way):
-    """
-    Prend le nom du dossier ou rechercher les cartes.
-    Retourne un dictionnaire comportant le nom de la carte
-    ainsi que la carte sous forme str
-    """
-    lstMap = []
-    for fileMap in listdir(way):
-        if fileMap.endswith(".txt"):
-            nameMap = fileMap[:-4]
-            fileWay = os.path.join(way, fileMap)
-            with open(fileWay, 'r') as files:
-                lstMap.append([nameMap, files.read()])
-    return lstMap
+    easyLvlPos.topleft = 250, 250
+    mediumLvlPos.topleft = 250, 300
+    hardLvlPos.topleft = 250, 350
 
-def runGame(choiceMap):
-    labyrinth = Labyrinth('X', ' ', 'O', 'U', '.' ,choiceMap.returnLabyrinth())
-    continueGame = 0
-    labyrinth.printColor()
-    while continueGame != 1:
-        with keyboard.Listener(on_press=on_press) as listener:
-            listener.join()
-        os.system('clear')
-        newPst = labyrinth.newPosition(moveKey)
-        continueGame = labyrinth.checkNewPosition(newPst)
-        labyrinth.printColor()
+    frame.blit(easyLvl, easyLvlPos)
+    frame.blit(mediumLvl, mediumLvlPos)
+    frame.blit(hardLvl, hardLvlPos)
+
+    pygame.display.flip()
