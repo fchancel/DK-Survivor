@@ -17,7 +17,13 @@ menu = 1
 game = 0
 choiceLvl = 1
 firstTime = 1
-
+lstLabyrinth = list()
+nbFile = 3
+while nbFile > 0:
+    with open('maps/n_' + str(nbFile) + '.txt', 'r') as fileMap:
+        lstLabyrinth.append(Labyrinth(frame, 'n_' + str(nbFile), fileMap.read()))
+    nbFile -= 1
+lstLabyrinth[choiceLvl -1].printLabyrinth()
 pygame.key.set_repeat(100, 50)
 while keepFrame == 1: #BOUCLE FENETRE
     for event in pygame.event.get():
@@ -41,14 +47,19 @@ while keepFrame == 1: #BOUCLE FENETRE
             if event.type == KEYDOWN:
                 if event.key == K_DOWN and choiceLvl < 3:
                     choiceLvl += 1
+                    lstLabyrinth[choiceLvl -1].printLabyrinth()
                 elif event.key == K_UP and choiceLvl > 1:
                     choiceLvl -= 1
+                    lstLabyrinth[choiceLvl -1].printLabyrinth()
                 elif event.key == K_1:
                     choiceLvl =1 
+                    lstLabyrinth[choiceLvl -1].printLabyrinth()
                 elif event.key == K_2:
                     choiceLvl = 2 
+                    lstLabyrinth[choiceLvl -1].printLabyrinth()
                 elif event.key == K_3:
-                    choiceLvl = 3 
+                    choiceLvl = 3
+                    lstLabyrinth[choiceLvl -1].printLabyrinth() 
                 elif event.key == K_RETURN:
                     menu = 0
                     game = 1
