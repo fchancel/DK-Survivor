@@ -43,3 +43,14 @@ def printMenu(frame, choice):
     frame.blit(hardLvl, hardLvlPos)
 
     pygame.display.flip()
+
+def printPause(frame):
+    titleText = pygame.font.SysFont('quicksand', 80)
+    tText = titleText.render("PAUSE", True, (255, 255, 255))
+    titleTextPos = tText.get_rect()
+    titleTextPos.centerx = frame.get_rect().centerx
+    titleTextPos.centery = frame.get_rect().centery
+
+    frame.blit(tText, titleTextPos)
+
+    pygame.display.flip()
