@@ -6,11 +6,13 @@ from pygame.locals import *
 from random import randrange
 from constante import Consts
 from function import *
-from Class import *
+from Enemy import *
+from Labyrinth import *
+from Perso import *
 
 #INITIALISATION FENETRE
 pygame.init()
-frame = pygame.display.set_mode((Consts.FRAME_SIZE, Consts.FRAME_SIZE))
+frame = pygame.display.set_mode((Consts.FRAME_SIZE + 400, Consts.FRAME_SIZE))
 pygame.display.set_caption(Consts.TITLE_FRAME)
 
 keepFrame = True #MAINTIENT LA FENETRE ACTIVE
@@ -94,6 +96,8 @@ while keepFrame == True: #BOUCLE FENETRE
         perso.printPerso()
         for enemy in lstEnemy:
             enemy.printEnemy()
+            if enemy.loose == True :
+                lstLabyrinth[lvl].finishGame(0)
         pygame.display.flip()
 
         #GESTION DES EVENEMENT
@@ -120,11 +124,12 @@ while keepFrame == True: #BOUCLE FENETRE
                     printBreak(frame)
                 #GESTION DE LA SORTIE DE PARTIE
                 elif event.key == K_ESCAPE:
-                    lstLabyrinth[lvl].printLabyrinth()
                     game = False
                     menu = True
                     firstTime = True
                     stopEnemyThread(lstEnemy)
+                    lstLabyrinth[lvl].createLabyrinth()
+                    lstLabyrinth[lvl].printLabyrinth()
         #GESTION MODE PAUSE
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -138,4 +143,5 @@ while keepFrame == True: #BOUCLE FENETRE
                 stopEnemyThread(lstEnemy)
                 menu = True
                 firstTime = True
+                lstLabyrinth[lvl].createLabyrinth()
                 lstLabyrinth[lvl].printLabyrinth()
