@@ -2,6 +2,7 @@ from random import randrange
 from constante import Consts
 import pygame
 import time
+from threading import Thread
 
 class Labyrinth:
 
@@ -47,13 +48,18 @@ class Labyrinth:
             if self.start in elt:
                 return(i, elt.index(self.start))
 
-class Enemy:
+    def __repr__(self):
+        return '<class labyrinth {}>'.format(self.name)
+
+class Enemy(Thread):
     def __init__(self, frame, labyrinth, perso, enemy):
+        Thread.__init__(self)
         self.enemy = enemy
         self.frame = frame
         self.cross = 'C'
         self.labyrinth = labyrinth
         self.perso = perso
+        self.continueThread = True
         self.enemyPos = self.findEnemy()
         self.x = self.enemyPos[0]
         self.y = self.enemyPos[1]
@@ -62,25 +68,36 @@ class Enemy:
         self.right = pygame.image.load(Consts.ENEMY_RIGHT).convert_alpha()
         self.left = pygame.image.load(Consts.ENEMY_LEFT).convert_alpha()
         self.direction = self.down
+        self.way = 0
+
+    def run(self):
+        while self.continueThread == True:
+            
+            time.sleep(0.17)
+            self.moveEnemy()
+
+    def stopThread(self):
+        self.continueThread = False
+
 
     def printEnemy(self):
         self.frame.blit(self.direction, (self.y * Consts.SIZE_SPRITE, self.x * Consts.SIZE_SPRITE))
 
-    def moveEnemy(self, way):
+    def moveEnemy(self):
         pygame.time.Clock().tick(3000)
         i = self.x
         j = self.y
         lst = ['down', 'left', 'up', 'right']
-        if lst[way] == 'up':
+        if lst[self.way] == 'up':
             i -= 1
             self.direction = self.up
-        elif lst[way] == 'down':
+        elif lst[self.way] == 'down':
             i += 1
             self.direction = self.down
-        elif lst[way] == 'left':
+        elif lst[self.way] == 'left':
             j -= 1            
             self.direction = self.left
-        elif lst[way] == 'right':
+        elif lst[self.way] == 'right':
             j += 1
             self.direction = self.right
         if i < (Consts.NB_SPRITE ) and j < (Consts.NB_SPRITE ):
@@ -88,12 +105,13 @@ class Enemy:
                 self.x = i
                 self.y = j
                 if self.labyrinth.grille[i][j] == self.cross:
-                    way = randrange(0, 4) 
-                return way
+                    self.way = randrange(0, 4) 
             else:
-                return self.moveEnemy(randrange(0, 4))
+                self.way = randrange(0, 4)
+                self.moveEnemy()
         else:
-            return self.moveEnemy(randrange(0, 4))
+            self.way = randrange(0, 4)
+            self.moveEnemy()
 
 
     def findEnemy(self):
@@ -118,11 +136,6 @@ class Perso:
 
     def printPerso(self):
         self.frame.blit(self.direction, (self.y * Consts.SIZE_SPRITE, self.x * Consts.SIZE_SPRITE))
-
-    # def moveDk(self, key):
-    #     result = self.checkPosition(key)
-    #     if result == 0:
-    #         if key == 'up'
 
     def moveDk(self, key):
         i = self.x

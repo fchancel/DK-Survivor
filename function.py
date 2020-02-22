@@ -23,11 +23,11 @@ def printMenu(frame, choice):
     easyLvl = normalText.render("1 - Facile", True, white)
     mediumLvl = normalText.render('2 - Moyen', True, white)
     hardLvl = normalText.render('3 - Difficile', True, white)
-    if choice == 1:
+    if choice == 0:
         easyLvl = normalText.render("1 - Facile", True, green)
-    elif choice == 2:
+    elif choice == 1:
         mediumLvl = normalText.render('2 - Moyen', True, green)
-    elif choice == 3:
+    elif choice == 2:
         hardLvl = normalText.render('3 - Difficile', True, green)
 
     easyLvlPos = easyLvl.get_rect() 
