@@ -32,21 +32,7 @@ while count < nbFile:
 lstLabyrinth[lvl].printLabyrinth()
 
 pygame.key.set_repeat(100, 50)
-while keepFrame == True: #BOUCLE FENETRE
-    #GESTION MODE PAUSE
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            keepFrame = False
-        if event.type == KEYDOWN:
-            if event.key == K_SPACE:
-                game = True
-                returnToBreak = True
-            elif event.key == K_ESCAPE:
-                stopEnemyThread(lstEnemy)
-                menu = True
-                firstTime = True
-                lstLabyrinth[lvl].printLabyrinth()
-                
+while keepFrame == True: #BOUCLE FENETRE              
     #BOUCLE UTILISATION DU MENU
     while menu == True: 
         pygame.time.Clock().tick(30)
@@ -103,6 +89,13 @@ while keepFrame == True: #BOUCLE FENETRE
             for enemy in lstEnemy:
                 enemy.againThread()
 
+        #GESTION AFFICHAGE DE LA PARTIE
+        lstLabyrinth[lvl].printLabyrinth()
+        perso.printPerso()
+        for enemy in lstEnemy:
+            enemy.printEnemy()
+        pygame.display.flip()
+
         #GESTION DES EVENEMENT
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -122,9 +115,9 @@ while keepFrame == True: #BOUCLE FENETRE
                 elif event.key == K_SPACE:
                     game = False
                     returnToBreak = False
-                    printBreak(frame)
                     for enemy in lstEnemy:
                         enemy.breakThread()
+                    printBreak(frame)
                 #GESTION DE LA SORTIE DE PARTIE
                 elif event.key == K_ESCAPE:
                     lstLabyrinth[lvl].printLabyrinth()
@@ -132,8 +125,17 @@ while keepFrame == True: #BOUCLE FENETRE
                     menu = True
                     firstTime = True
                     stopEnemyThread(lstEnemy)
-        #GESTION AFFICHAGE DE LA PARTIE
-        lstLabyrinth[lvl].printLabyrinth()
-        perso.printPerso()
-        enemy.printEnemy()
-        pygame.display.flip()
+        #GESTION MODE PAUSE
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            keepFrame = False
+            stopEnemyThread(lstEnemy)
+        if event.type == KEYDOWN:
+            if event.key == K_SPACE:
+                game = True
+                returnToBreak = True
+            elif event.key == K_ESCAPE:
+                stopEnemyThread(lstEnemy)
+                menu = True
+                firstTime = True
+                lstLabyrinth[lvl].printLabyrinth()

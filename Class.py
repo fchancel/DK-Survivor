@@ -10,8 +10,7 @@ class Labyrinth:
         self.frame = frame
         self.name = name
         self.obstacle = 'O'
-        self.way = ' '
-        self.exitWay = 'U'
+        self.banana = ' '
         self.start = 'X'
         self.perso = 'D'
         self.grille = self.createLabyrinth(strLabyrinth)
@@ -28,19 +27,17 @@ class Labyrinth:
     def printLabyrinth(self):
         obstacleImg = pygame.image.load(Consts.OBSTACLE).convert()
         startImg = pygame.image.load(Consts.START).convert()
-        arriveImg = pygame.image.load(Consts.ARRIVE).convert_alpha()
+        bananaImg = pygame.image.load(Consts.BANANA).convert_alpha()
         wayImg = pygame.image.load(Consts.WAY).convert()
         for i, string in enumerate(self.grille):
             for j, char in enumerate(string):
                 if char == self.obstacle:
                     self.frame.blit(obstacleImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
-                elif char == self.exitWay:
-                    self.frame.blit(wayImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
-                    self.frame.blit(arriveImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
                 elif char == self.start:
                     self.frame.blit(startImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
                 else:
                     self.frame.blit(wayImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))                 
+                    self.frame.blit(bananaImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))                 
 
 
     def findStart(self):
@@ -74,7 +71,7 @@ class Enemy(Thread):
     def run(self):
         while self.continueThread == True:
             while self.haltThread == True:
-                time.sleep(0.17)
+                time.sleep(0.15)
                 self.moveEnemy()
 
     def breakThread(self):
@@ -87,12 +84,10 @@ class Enemy(Thread):
         self.haltThread = False
         self.continueThread = False
 
-
     def printEnemy(self):
         self.frame.blit(self.direction, (self.y * Consts.SIZE_SPRITE, self.x * Consts.SIZE_SPRITE))
 
     def moveEnemy(self):
-        pygame.time.Clock().tick(3000)
         i = self.x
         j = self.y
         lst = ['down', 'left', 'up', 'right']
@@ -165,9 +160,5 @@ class Perso:
                 self.x = i
                 self.y = j
                 return 0
-            elif self.labyrinth.grille[i][j] == self.labyrinth.exitWay:
-                self.x = i
-                self.y = j
-                return 1
             else:
                 return -1

@@ -14,7 +14,7 @@ class Consts():
     ENEMY_DOWN = 'img/enemy_down.png'
     WAY = 'img/way.jpg'
     START = 'img/start.png'
-    ARRIVE = 'img/arrive.png'
+    BANANA = 'img/banana.png'
     NB_SPRITE = 27
     SIZE_SPRITE = 30
     FRAME_SIZE = NB_SPRITE * SIZE_SPRITE
