@@ -69,9 +69,14 @@ class Labyrinth:
         """
         Result contient soit 1 en cas de victoire soit 0 en cas de défaite
         """
+        text = pygame.font.Font('police/SuperMario256.ttf', 50)
         if result == 0:
-            print('loose')
-            exit
+            loose = text.render('PERDU', True, Consts.WHITE)
+            loosePos = loose.get_rect()
+            loosePos.topleft = 1000, 400
+            self.frame.blit(loose, loosePos)
+            
+            pygame.display.flip()
 
     def __repr__(self):
         return '<class labyrinth {}>'.format(self.name)

@@ -24,6 +24,7 @@ returnToBreak = False #VERIFIE SI LE JOUEUR REVIENT DE PAUSE
 lstLabyrinth = list() #LIST CONTENANT LES LABYRINTH
 nbFile = 3 #NOMBRE DE FICHIER LABYRINTH DISPONIBLE
 count = 0 #COMPTEUR GÉNÉRAL
+endGame = -1
 
 #AJOUTE DANS LA LISTE DES LABYRINTH, LES OBJECTS CLASS CONTENANT CHACUN UN LABYRINTH
 while count < nbFile:
@@ -72,7 +73,8 @@ while keepFrame == True: #BOUCLE FENETRE
     #BOUCLE UTILISATION DU JEU
     while game == True: 
         pygame.time.Clock().tick(30)
-
+        printInGame(frame, lstLabyrinth[lvl], lvl)
+        pygame.display.flip()
         #INITIALISATION DU PERSO, DES ENNEMIES ET DU MULTI THREAD
         if firstTime == True:
             firstTime = False
@@ -97,9 +99,7 @@ while keepFrame == True: #BOUCLE FENETRE
         for enemy in lstEnemy:
             enemy.printEnemy()
             if enemy.loose == True :
-                lstLabyrinth[lvl].finishGame(0)
-        pygame.display.flip()
-
+                endGame = 0
         #GESTION DES EVENEMENT
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -108,13 +108,13 @@ while keepFrame == True: #BOUCLE FENETRE
             if event.type == KEYDOWN:
                 #GESTION DU MOUVEMENT DU PERSO
                 if event.key == K_DOWN:
-                    perso.moveDk('down')
+                    endGame = perso.moveDk('down')
                 elif event.key == K_UP:
-                    perso.moveDk('up')
+                    endGame = perso.moveDk('up')
                 elif event.key == K_LEFT:
-                    perso.moveDk('left')
+                    endGame = perso.moveDk('left')
                 elif event.key == K_RIGHT:
-                    perso.moveDk('right')
+                    endGame = perso.moveDk('right')
                 #GESTION DU MODE PAUSE
                 elif event.key == K_SPACE:
                     game = False
@@ -145,3 +145,7 @@ while keepFrame == True: #BOUCLE FENETRE
                 firstTime = True
                 lstLabyrinth[lvl].createLabyrinth()
                 lstLabyrinth[lvl].printLabyrinth()
+    if endGame == 1 or endGame == 0:
+        stopEnemyThread(lstEnemy)
+        game = 0
+        lstLabyrinth[lvl].finishGame(endGame)

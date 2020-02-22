@@ -38,10 +38,11 @@ class Perso:
             j += 1
             self.direction = self.right
         if i < (Consts.NB_SPRITE ) and j < (Consts.NB_SPRITE ):
+            if self.labyrinth.grille[i][j][0] == '1' or self.labyrinth.grille[i][j][0] == '2' or self.labyrinth.grille[i][j][0] == '3':
+                print('fewfwe')
+                return 0
             if self.labyrinth.grille[i][j][0] != self.labyrinth.obstacle:
                 self.x = i
                 self.y = j
                 self.labyrinth.manageBanana((i, j))
-                return 0
-            else:
                 return -1
