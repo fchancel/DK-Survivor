@@ -44,7 +44,7 @@ def printMenu(frame, choice):
 
     pygame.display.flip()
 
-def printPause(frame):
+def printBreak(frame):
     titleText = pygame.font.SysFont('quicksand', 80)
     tText = titleText.render("PAUSE", True, (255, 255, 255))
     titleTextPos = tText.get_rect()
@@ -54,3 +54,8 @@ def printPause(frame):
     frame.blit(tText, titleTextPos)
 
     pygame.display.flip()
+
+def stopEnemyThread(lstEnemy):
+    for enemy in lstEnemy:
+        enemy.stopThread()
+        enemy.join()

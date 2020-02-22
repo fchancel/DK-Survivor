@@ -60,6 +60,7 @@ class Enemy(Thread):
         self.labyrinth = labyrinth
         self.perso = perso
         self.continueThread = True
+        self.haltThread = True
         self.enemyPos = self.findEnemy()
         self.x = self.enemyPos[0]
         self.y = self.enemyPos[1]
@@ -72,11 +73,18 @@ class Enemy(Thread):
 
     def run(self):
         while self.continueThread == True:
-            
-            time.sleep(0.17)
-            self.moveEnemy()
+            while self.haltThread == True:
+                time.sleep(0.17)
+                self.moveEnemy()
+
+    def breakThread(self):
+        self.haltThread = False
+
+    def againThread(self):
+        self.haltThread = True
 
     def stopThread(self):
+        self.haltThread = False
         self.continueThread = False
 
 

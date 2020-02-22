@@ -13,11 +13,12 @@ pygame.init()
 frame = pygame.display.set_mode((Consts.FRAME_SIZE, Consts.FRAME_SIZE))
 pygame.display.set_caption(Consts.TITLE_FRAME)
 
-keepFrame = 1 #MAINTIENT LA FENETRE ACTIVE
-menu = 1 #VERIFIE SI NOUS SOMMES DANS LE MENU
-game = 0 #VERIFIE SI NOUS SOMMES DANS UNE PARTIE
+keepFrame = True #MAINTIENT LA FENETRE ACTIVE
+menu = True #VERIFIE SI NOUS SOMMES DANS LE MENU
+game = False #VERIFIE SI NOUS SOMMES DANS UNE PARTIE
 lvl = 0 #CHOIX DU LEVEL
-firstTime = 1 #VERIFIE SI C'EST LE PREMIER LANCEMENT DE LA PARTIE AFIN D'INITIALISER LES ENNEMIES
+firstTime = True #VERIFIE SI C'EST LE PREMIER LANCEMENT DE LA PARTIE AFIN D'INITIALISER LES ENNEMIES
+returnToBreak = False #VERIFIE SI LE JOUEUR REVIENT DE PAUSE
 lstLabyrinth = list() #LIST CONTENANT LES LABYRINTH
 nbFile = 3 #NOMBRE DE FICHIER LABYRINTH DISPONIBLE
 count = 0 #COMPTEUR GÉNÉRAL
@@ -31,29 +32,29 @@ while count < nbFile:
 lstLabyrinth[lvl].printLabyrinth()
 
 pygame.key.set_repeat(100, 50)
-while keepFrame == 1: #BOUCLE FENETRE
+while keepFrame == True: #BOUCLE FENETRE
     #GESTION MODE PAUSE
     for event in pygame.event.get():
         if event.type == QUIT:
-            keepFrame = 0
+            keepFrame = False
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
-                game = 1
-                if firstTime == 0:
-                    for enemy in lstEnemy:
-                        enemy.start()
+                game = True
+                returnToBreak = True
             elif event.key == K_ESCAPE:
-                menu = 1
+                stopEnemyThread(lstEnemy)
+                menu = True
+                firstTime = True
                 lstLabyrinth[lvl].printLabyrinth()
                 
     #BOUCLE UTILISATION DU MENU
-    while menu == 1: 
+    while menu == True: 
         pygame.time.Clock().tick(30)
         printMenu(frame, lvl)
         for event in pygame.event.get():
             if event.type == QUIT:
-                keepFrame = 0
-                menu = 0
+                keepFrame = False
+                menu = False
             if event.type == KEYDOWN:
                 #GESTION DE L'AFFICHAGE ET DU CHOIX DE LEVEL
                 if event.key == K_DOWN and lvl < 2:
@@ -73,20 +74,20 @@ while keepFrame == 1: #BOUCLE FENETRE
                     lstLabyrinth[lvl].printLabyrinth() 
                 #GESTION ENTRE MENU ET JEU
                 elif event.key == K_RETURN:
-                    menu = 0
-                    game = 1
+                    menu = False
+                    game = True
                 elif event.key == K_ESCAPE:
-                    game = 0
-                    menu = 0
-                    keepFrame = 0
+                    game = False
+                    menu = False
+                    keepFrame = False
     
     #BOUCLE UTILISATION DU JEU
-    while game == 1: 
+    while game == True: 
         pygame.time.Clock().tick(30)
 
         #INITIALISATION DU PERSO, DES ENNEMIES ET DU MULTI THREAD
-        if firstTime == 1:
-            firstTime = 0
+        if firstTime == True:
+            firstTime = False
             perso = Perso(frame, lstLabyrinth[lvl])
             count = 0
             lstEnemy = []
@@ -98,11 +99,15 @@ while keepFrame == 1: #BOUCLE FENETRE
                 enemy.start()
                 pygame.display.flip()
 
+        if returnToBreak == True:
+            for enemy in lstEnemy:
+                enemy.againThread()
+
         #GESTION DES EVENEMENT
         for event in pygame.event.get():
             if event.type == QUIT:
-                keepFrame = 0
-                game = 0
+                keepFrame = False
+                game = False
             if event.type == KEYDOWN:
                 #GESTION DU MOUVEMENT DU PERSO
                 if event.key == K_DOWN:
@@ -115,20 +120,18 @@ while keepFrame == 1: #BOUCLE FENETRE
                     perso.moveDk('right')
                 #GESTION DU MODE PAUSE
                 elif event.key == K_SPACE:
-                    game = 0
+                    game = False
+                    returnToBreak = False
+                    printBreak(frame)
                     for enemy in lstEnemy:
-                        enemy.stopThread()
-                        enemy.join()
-                    printPause(frame)
+                        enemy.breakThread()
                 #GESTION DE LA SORTIE DE PARTIE
                 elif event.key == K_ESCAPE:
                     lstLabyrinth[lvl].printLabyrinth()
-                    game = 0
-                    menu = 1
-                    firstTime = 1
-                    for enemy in lstEnemy:
-                        enemy.stopThread()
-                        enemy.join()
+                    game = False
+                    menu = True
+                    firstTime = True
+                    stopEnemyThread(lstEnemy)
         #GESTION AFFICHAGE DE LA PARTIE
         lstLabyrinth[lvl].printLabyrinth()
         perso.printPerso()
