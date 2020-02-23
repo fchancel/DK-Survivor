@@ -5,23 +5,13 @@ import pygame
 from pygame.locals import *
 from constante import Consts
 
-def printBgMenu(frame):
-    i = Consts.FRAME_SIZE
-    j = 0
-    while i < Consts.FRAME_SIZE + 400:
-        while j < Consts.FRAME_SIZE:
-            bg = pygame.image.load(Consts.OBSTACLE).convert()
-            frame.blit(bg, (i, j))
-            j += Consts.SIZE_SPRITE
-        j = 0
-        i += Consts.SIZE_SPRITE
-    
 
 def printMenu(frame, choice):
     #MENU
     #AFFICHAGE DU TITRE
-
-    printBgMenu(frame)
+       
+    bg = pygame.image.load(Consts.BACKGROUND_MENU).convert()
+    frame.blit(bg, (Consts.FRAME_SIZE, 0))
     titleText = pygame.font.Font('police/BBB.ttf', 70)
     normalText = pygame.font.Font('police/SuperMario256.ttf', 35)
     tText = titleText.render(Consts.TITLE_FRAME, True, (255, 255, 255))
@@ -73,7 +63,8 @@ def stopEnemyThread(lstEnemy):
 
 def printInGame(frame, labyrinth, lvl):
     lstLvl = ['Facile', 'Moyen', 'Difficile']
-    printBgMenu(frame)
+    bg = pygame.image.load(Consts.BACKGROUND_MENU).convert()
+    frame.blit(bg, (Consts.FRAME_SIZE, 0))
 
     text = pygame.font.Font('police/SuperMario256.ttf', 35)
 

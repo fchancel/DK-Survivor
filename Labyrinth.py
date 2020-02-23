@@ -35,7 +35,7 @@ class Labyrinth:
         self.totalBanana = banana
         self.grille = lstLabyrinth
 
-    def printLabyrinth(self):
+    def printLabyrinth(self, perso, lstEnemy):
         obstacleImg = pygame.image.load(Consts.OBSTACLE).convert()
         startImg = pygame.image.load(Consts.START).convert()
         bananaImg = pygame.image.load(Consts.BANANA).convert_alpha()
@@ -49,7 +49,13 @@ class Labyrinth:
                 elif char[0] != self.obstacle:
                     self.frame.blit(wayImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
                 if char[0] != self.obstacle and char[1] ==  1:
-                    self.frame.blit(bananaImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))                 
+                    self.frame.blit(bananaImg, (j * Consts.SIZE_SPRITE, i * Consts.SIZE_SPRITE))
+        if perso != None: 
+                perso.printPerso()
+        if lstEnemy != None:
+            for enemy in lstEnemy:
+                enemy.printEnemy()     
+        pygame.display.flip()       
 
     def manageBanana(self, pos):
         i = pos[0]
@@ -58,6 +64,9 @@ class Labyrinth:
             self.grille[i][j][1] = 0
             self.nbBanana += 1
 
+    def finishBanana(self):
+        if self.totalBanana - self.nbBanana == 0:
+            return 1 
 
     def findStart(self):
         for i, elt in enumerate(self.grille):
@@ -65,18 +74,23 @@ class Labyrinth:
                 if self.start in char:
                     return(i, j)
 
-    def finishGame(self, result):
+    def finishGame(self, contactEnemy, noBanana):
         """
         Result contient soit 1 en cas de victoire soit 0 en cas de défaite
         """
-        text = pygame.font.Font('police/SuperMario256.ttf', 50)
-        if result == 0:
+        text = pygame.font.Font('police/SuperMario256.ttf', 80)
+        if contactEnemy == 0:
             loose = text.render('PERDU', True, Consts.WHITE)
             loosePos = loose.get_rect()
-            loosePos.topleft = 1000, 400
+            loosePos.topleft = 300, 300
             self.frame.blit(loose, loosePos)
+        elif noBanana == 1:
+            win = text.render('GAGNER', True, Consts.WHITE)
+            winPos = win.get_rect()
+            winPos.topleft = 300, 300
+            self.frame.blit(win, winPos)
             
-            pygame.display.flip()
+        pygame.display.flip()
 
     def __repr__(self):
         return '<class labyrinth {}>'.format(self.name)
