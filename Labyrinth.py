@@ -1,25 +1,44 @@
-from random import randrange
 from constante import Consts
 import pygame
-import time
-from threading import Thread
 
 class Labyrinth:
-
+    """
+    Class représentant un labyrinth.
+    Gestion de la création d'une grille labyrinth (list) à partir d'une str
+    Affichage du labyrinth
+    Gestion du nombre de banane
+    Gestion de la fin de partie
+    """
     def __init__(self, frame, name, strLabyrinth):
+        """
+        Initialisation de l'instance labyrinth.
+        Prend en paramètre la frame du jeu, le nom du labyrinth 
+        et la str permettant la création de la grille
+        frame = frame du jeu
+        name = nom de la carte du labyrinth
+        strLabyrinth = string initial permettant la création de la grille
+        grille = triple list représentant le labyrinth
+        obstacle, banana, start, perso = représentation des éléments du labyrinth dans la string
+        totalBanana = nombre total de banane dans la partie
+        nbBanana = nombre de banane récupéré par le joueur
+        """
         self.frame = frame
         self.name = name
+        self.strLabyrinth = strLabyrinth
+        self.grille = list()
+        self.createLabyrinth()
         self.obstacle = 'O'
         self.banana = ' '
         self.start = 'X'
         self.perso = 'D'
         self.totalBanana = int()
         self.nbBanana = int()
-        self.strLabyrinth = strLabyrinth
-        self.grille = list()
-        self.createLabyrinth()
 
     def createLabyrinth(self):
+        """
+        Méthode initialisant une triple liste représentant le labyrinth,
+        initialise également le nombre total de banane sur le terrain.
+        """
         self.nbBanana = 0
         banana = 0
         labyrinth = self.strLabyrinth.split('\n')
@@ -36,6 +55,13 @@ class Labyrinth:
         self.grille = lstLabyrinth
 
     def printLabyrinth(self, perso, lstEnemy):
+        """
+        Méthode permettant d'afficher le labyrinth, avec son joueurs et ses ennemies 
+        avec l'aide des fonctions printPerso() issu de la class Perso
+        et printEnemy() isu de la class Enemy
+        Prends en paramètre l'instance de la classe Perso
+        ainsi que la list des instances de la class Enemy
+        """
         obstacleImg = pygame.image.load(Consts.OBSTACLE).convert()
         startImg = pygame.image.load(Consts.START).convert()
         bananaImg = pygame.image.load(Consts.BANANA).convert_alpha()
@@ -58,6 +84,10 @@ class Labyrinth:
         pygame.display.flip()       
 
     def manageBanana(self, pos):
+        """
+        Méthode ajustant les bananes sur la grille et calculant le nombre de 
+        bananes récupéré par le joueur
+        """
         i = pos[0]
         j = pos[1]
         if self.grille[i][j][1] == 1:
@@ -65,10 +95,16 @@ class Labyrinth:
             self.nbBanana += 1
 
     def finishBanana(self):
+        """
+        Méthode permettant de vérifier si le joueur à récupérer toutes les bananes
+        """
         if self.totalBanana - self.nbBanana == 0:
             return 1 
 
     def findStart(self):
+        """
+        Méthode retournant le point de départ du joueur
+        """
         for i, elt in enumerate(self.grille):
             for j, char in enumerate(elt):
                 if self.start in char:
@@ -76,7 +112,9 @@ class Labyrinth:
 
     def finishGame(self, contactEnemy, noBanana):
         """
-        Result contient soit 1 en cas de victoire soit 0 en cas de défaite
+        Méthode permettant de savoir si le joueur est gagnant ou perdant.
+        Prends en paramètre contactEnemy (0 si le joueur à été en contact avec l'ennemie)
+        et noBanana (1 si le joueur récupère toutes les bananes)
         """
         text = pygame.font.Font('police/SuperMario256.ttf', 80)
         if contactEnemy == 0:
