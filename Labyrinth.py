@@ -26,13 +26,13 @@ class Labyrinth:
         self.name = name
         self.strLabyrinth = strLabyrinth
         self.grille = list()
-        self.createLabyrinth()
         self.obstacle = 'O'
         self.banana = ' '
         self.start = 'X'
         self.perso = 'D'
         self.totalBanana = int()
         self.nbBanana = int()
+        self.createLabyrinth()
 
     def createLabyrinth(self):
         """

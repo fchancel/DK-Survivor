@@ -1,15 +1,10 @@
-#!/usr/bin/env python
-# -*-coding:utf-8 -*
-
 import pygame
 from pygame.locals import *
 from constante import Consts
 
 
-def printMenu(frame, choice):
-    #MENU
-    #AFFICHAGE DU TITRE
-       
+def printMenu(frame, choice):   
+    # AFFICHAGE MENU
     bg = pygame.image.load(Consts.BACKGROUND_MENU).convert()
     frame.blit(bg, (Consts.FRAME_SIZE, 0))
     titleText = pygame.font.Font('police/BBB.ttf', 70)

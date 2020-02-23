@@ -89,6 +89,7 @@ while keepFrame == True: #BOUCLE FENETRE
                 enemy.way = randrange(0, 4)
                 enemy.start()
 
+        #RETOUR APRÈS PAUSE AFIN DE RELANCER LES THREAD
         if returnToBreak == True:
             for enemy in lstEnemy:
                 enemy.againThread()
@@ -97,12 +98,11 @@ while keepFrame == True: #BOUCLE FENETRE
         #GESTION AFFICHAGE DE LA PARTIE
         lstLabyrinth[lvl].printLabyrinth(perso, lstEnemy)
 
-        #VERIFICATION VICTOIRE OU DÉFAITE
+        #VERIFICATION CONTACT AVEC ENNEMIE
         for enemy in lstEnemy:
             if enemy.loose == True :
                 contactEnemy = 0
         #GESTION DES EVENEMENT
-        
         for event in pygame.event.get():
             if event.type == QUIT:
                 keepFrame = False
@@ -140,11 +140,14 @@ while keepFrame == True: #BOUCLE FENETRE
                     stopEnemyThread(lstEnemy)
                     lstLabyrinth[lvl].createLabyrinth()
                     lstLabyrinth[lvl].printLabyrinth(None, None)
+
+        #GESTION DE LA VICTOIRE OU DÉFAITE
         noBanana = lstLabyrinth[lvl].finishBanana()
         if contactEnemy == 0 or noBanana == 1:
             stopEnemyThread(lstEnemy)
             game = 0
             lstLabyrinth[lvl].finishGame(contactEnemy, noBanana)
+            
     #GESTION MODE PAUSE
     for event in pygame.event.get():
         if event.type == QUIT:
