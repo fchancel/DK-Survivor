@@ -18,3 +18,17 @@ ou mettre la partie en Pause avec la barre espace du clavier.
 
 La partie prend fin lorsque le joueur rencontre un ennemie (défaite) ou lorsqu'il 
 réussit à récupérer toutes les bananes (victoire)
+
+## Détails et Conception
+
+Le menu (sélection du niveau) affiche la représentation des labyrinthes sur la 
+partie gauche de la fênetre selon le niveau sélectionné.
+
+La séléction des niveaux se fait avec l'aide des flèches directionnelles ou avec 
+l'aide des chiffres indiqués.
+
+Les labyrinthes sont créées à partir de fichier texte (trouvable dans le dossier
+/map).
+
+Les ennemies sont lancés sur différents thread afin d'être indépendant les uns 
+des autres. Leurs mouvements sont semi aléatoirs.
