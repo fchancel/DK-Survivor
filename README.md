@@ -35,4 +35,4 @@ des autres. Leurs mouvements sont semi aléatoirs.
 
 ## Démonstration
 
-![Démonstration ft_ls](https://gitlab.com/fchancel/python-terminal-labyrinth-game/-/blob/master/img/dk-demo.gif)
+![Démonstration ft_ls](https://gitlab.com/fchancel/python-terminal-labyrinth-game/-/raw/master/img/dk-demo.gif)
