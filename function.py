@@ -7,7 +7,7 @@ def printMenu(frame, choice):
     # AFFICHAGE MENU
     bg = pygame.image.load(Consts.BACKGROUND_MENU).convert()
     frame.blit(bg, (Consts.FRAME_SIZE, 0))
-    titleText = pygame.font.Font('police/BBB.ttf', 70)
+    titleText = pygame.font.Font('police/BBB.ttf', 50)
     normalText = pygame.font.Font('police/SuperMario256.ttf', 35)
     tText = titleText.render(Consts.TITLE_FRAME, True, (255, 255, 255))
     titleTextPos = tText.get_rect()

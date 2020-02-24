@@ -73,8 +73,7 @@ while keepFrame == True: #BOUCLE FENETRE
     
     #BOUCLE UTILISATION DU JEU
     while game == True: 
-        pygame.time.Clock().tick(8)
-        printInGame(frame, lstLabyrinth[lvl], lvl)
+        pygame.time.Clock().tick(12)
 
         #INITIALISATION DU PERSO, DES ENNEMIES ET DU MULTI THREAD
         if firstTime == True:
@@ -146,7 +145,9 @@ while keepFrame == True: #BOUCLE FENETRE
         if contactEnemy == 0 or noBanana == 1:
             stopEnemyThread(lstEnemy)
             game = 0
+            printInGame(frame, lstLabyrinth[lvl], lvl)
             lstLabyrinth[lvl].finishGame(contactEnemy, noBanana)
+        printInGame(frame, lstLabyrinth[lvl], lvl)
             
     #GESTION MODE PAUSE
     for event in pygame.event.get():
