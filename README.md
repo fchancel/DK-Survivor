@@ -32,3 +32,7 @@ Les labyrinthes sont créées à partir de fichier texte (trouvable dans le doss
 
 Les ennemies sont lancés sur différents thread afin d'être indépendant les uns 
 des autres. Leurs mouvements sont semi aléatoirs.
+
+## Démonstration
+
+![Démonstration ft_ls](https://gitlab.com/fchancel/python-terminal-labyrinth-game/-/blob/master/img/dk-demo.gif)
