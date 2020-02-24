@@ -1,5 +1,7 @@
 # DK SURVIVOR
 
+1er Projet Python
+
 ## Challenge
 
 Découverte du langage Python et de ses paquets graphique (pygame).
