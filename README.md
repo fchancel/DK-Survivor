@@ -34,4 +34,4 @@ des autres. Leurs mouvements sont semi-aléatoires.
 
 ## Démonstration
 
-![Démonstration ft_ls](https://gitlab.com/fchancel/python-terminal-labyrinth-game/-/raw/master/img/dk-demo.gif)
+![Démonstration ft_ls](https://raw.githubusercontent.com/fchancel/DK-Survivor/master/img/dk-demo.gif)
